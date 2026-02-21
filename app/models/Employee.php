@@ -49,7 +49,7 @@ class Employee {
 
     public function addEmployee($data) {
         $db = $this->getDb();
-        $db->query('INSERT INTO employee (id, firstName, middleName, lastName, sex, dateOfBirth, age, educationLevel, qualificationYear, areaOfSpecialisation, ageRange, email, phone, province, district, cluster, department, position, grade, experienceYears, responses) VALUES (:id, :firstName, :middleName, :lastName, :sex, :dateOfBirth, :age, :educationLevel, :qualificationYear, :areaOfSpecialisation, :ageRange, :email, :phone, :province, :district, :cluster, :department, :position, :grade, :experienceYears, :responses)');
+        $db->query('INSERT INTO employee (id, firstName, middleName, lastName, sex, dateOfBirth, age, educationLevel, qualificationYear, areaOfSpecialisation, ageRange, email, phone, locationType, province, district, cluster, department, position, grade, experienceYears, responses) VALUES (:id, :firstName, :middleName, :lastName, :sex, :dateOfBirth, :age, :educationLevel, :qualificationYear, :areaOfSpecialisation, :ageRange, :email, :phone, :locationType, :province, :district, :cluster, :department, :position, :grade, :experienceYears, :responses)');
 
         $generatedId = null;
         try {
@@ -79,6 +79,7 @@ class Employee {
         $db->bind(':ageRange', $data['ageRange'] ?? null);
         $db->bind(':email', $data['email'] ?? '');
         $db->bind(':phone', $data['phone'] ?? '');
+        $db->bind(':locationType', $data['locationType'] ?? null);
         $db->bind(':province', $data['province'] ?? '');
         $db->bind(':district', $data['district'] ?? '');
         $db->bind(':cluster', $data['cluster'] ?? '');

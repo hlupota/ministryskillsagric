@@ -53,11 +53,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (districtSelect) { districtSelect.disabled = true; districtSelect.required = false; }
 
     // Helpers to apply location modes deterministically
-    function applyHeadOfficeMode() {
+    function applyHeadOfficeMode(lock = false) {
         formData.locationType = 'Head Office';
         if (locationTypeSelect) {
             locationTypeSelect.value = 'Head Office';
-            locationTypeSelect.disabled = true;
+            locationTypeSelect.disabled = !!lock;
         }
         if (provinceSelect) {
             let hoOpt = Array.from(provinceSelect.options).find(o => o.value === 'Head Office');
@@ -1035,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else if (this.value === 'Office of the Permanent Secretary') {
             // Special rule: Office of the Permanent Secretary automatically uses Head Office
-            applyHeadOfficeMode();
+            applyHeadOfficeMode(true);
             if (locationTypeGroup) locationTypeGroup.classList.add('d-none');
         } else {
             // Restore Location selection for other departments
@@ -1063,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (locationTypeSelect) {
         locationTypeSelect.addEventListener('change', function() {
             if (this.value === 'Head Office') {
-                applyHeadOfficeMode();
+                applyHeadOfficeMode(false);
             } else {
                 applyProvinceMode();
             }
