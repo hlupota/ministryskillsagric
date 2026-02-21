@@ -50,9 +50,20 @@ class User {
         $hashed_password = $row->password;
         if (password_verify($password, $hashed_password)) {
             return $row;
-        } else {
-            return false;
         }
+        // Legacy plain-text password migration support
+        if ($password === $hashed_password) {
+            $db->query('UPDATE users SET password = :password WHERE id = :id');
+            $db->bind(':password', password_hash($password, PASSWORD_DEFAULT));
+            $db->bind(':id', $row->id);
+            $db->execute();
+            // Refresh row to include new hash
+            $db->query('SELECT * FROM users WHERE id = :id');
+            $db->bind(':id', $row->id);
+            $row = $db->single();
+            return $row;
+        }
+        return false;
     }
 
     // Find user by email

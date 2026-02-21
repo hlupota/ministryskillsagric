@@ -257,26 +257,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getSectionStyle(title) {
-        if (!title) return { icon: "ClipboardList", color: "text-gray-500", letter: "?" };
+        if (!title) return { icon: "ClipboardList", color: "text-secondary", letter: "?" };
         
         // Check for Numbered Sections first (e.g., SECTION 1, SECTION 2...)
         const numberMatch = title.match(/SECTION\s+(\d+)/i);
         if (numberMatch) {
-             return { icon: "ClipboardList", color: "text-gray-500", letter: numberMatch[1] };
+             return { icon: "ClipboardList", color: "text-secondary", letter: numberMatch[1] };
         }
 
-        if (title.includes("SECTION A")) return { icon: "BookOpen", color: "text-blue-600", letter: "A" };
-        if (title.includes("SECTION B")) return { icon: "Briefcase", color: "text-green-600", letter: "B" };
-        if (title.includes("SECTION C")) return { icon: "Lightbulb", color: "text-yellow-600", letter: "C" };
-        if (title.includes("SECTION D")) return { icon: "TrendingUp", color: "text-purple-600", letter: "D" };
-        if (title.includes("SECTION E")) return { icon: "Leaf", color: "text-emerald-600", letter: "E" };
-        if (title.includes("SECTION F")) return { icon: "BarChart", color: "text-indigo-600", letter: "F" };
-        if (title.includes("SECTION G")) return { icon: "Shield", color: "text-red-600", letter: "G" };
-        if (title.includes("SECTION H")) return { icon: "Users", color: "text-orange-600", letter: "H" };
-        if (title.includes("SECTION I")) return { icon: "Laptop", color: "text-cyan-600", letter: "I" };
-        if (title.includes("SECTION K")) return { icon: "Target", color: "text-pink-600", letter: "K" };
-        if (title.includes("FINAL REFLECTION") || title.includes("SECTION R")) return { icon: "FileText", color: "text-gray-600", letter: "R" };
-        return { icon: "ClipboardList", color: "text-gray-500", letter: "?" };
+        if (title.includes("SECTION A")) return { icon: "BookOpen", color: "text-primary", letter: "A" };
+        if (title.includes("SECTION B")) return { icon: "Briefcase", color: "text-success", letter: "B" };
+        if (title.includes("SECTION C")) return { icon: "Lightbulb", color: "text-warning", letter: "C" };
+        if (title.includes("SECTION D")) return { icon: "TrendingUp", color: "text-info", letter: "D" };
+        if (title.includes("SECTION E")) return { icon: "Leaf", color: "text-success", letter: "E" };
+        if (title.includes("SECTION F")) return { icon: "BarChart", color: "text-primary", letter: "F" };
+        if (title.includes("SECTION G")) return { icon: "Shield", color: "text-danger", letter: "G" };
+        if (title.includes("SECTION H")) return { icon: "Users", color: "text-warning", letter: "H" };
+        if (title.includes("SECTION I")) return { icon: "Laptop", color: "text-info", letter: "I" };
+        if (title.includes("SECTION K")) return { icon: "Target", color: "text-primary", letter: "K" };
+        if (title.includes("FINAL REFLECTION") || title.includes("SECTION R")) return { icon: "FileText", color: "text-secondary", letter: "R" };
+        return { icon: "ClipboardList", color: "text-secondary", letter: "?" };
     }
 
     function getSpecificQuestions(section, grade) {
@@ -529,6 +529,14 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>`;
     }
 
+    function renderAuthenticBanner() {
+        return `
+            <div class="d-flex align-items-start p-3 rounded-3 mb-3 border bg-light">
+              <div class="me-3" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div><div class="fw-semibold mb-1">Authentic Response Appeal</div><div class="small text-muted">This assessment supports legitimate capacity development and extension effectiveness. Authentic responses ensure credible and useful interventions.</div></div>
+            </div>`;
+    }
+
     function renderStepContent() {
         dynamicStepsContainer.innerHTML = '';
         window.scrollTo(0, 0);
@@ -539,26 +547,32 @@ document.addEventListener('DOMContentLoaded', function() {
         if (currentStep === 2) {
             // General Skills or Exec A/B
             if (execGrade) {
+                html += renderAuthenticBanner();
                 html += renderRatingScaleGuide(executiveSkillLabels);
                 html += renderExecCard(['sectionA', 'sectionB'], "Executive Leadership Skills Audit");
             } else {
+                html += renderAuthenticBanner();
                 html += renderRatingScaleGuide(generalSkillLabels);
                 html += renderGenericCard(generalSkills, "blue-500", generalSkillLabels);
             }
         } else if (currentStep === 3) {
             // Digital Skills or Exec C/D
             if (execGrade) {
+                html += renderAuthenticBanner();
                 html += renderRatingScaleGuide(executiveSkillLabels);
                 html += renderExecCard(['sectionC', 'sectionD'], "Executive Leadership Skills Audit");
             } else {
+                html += renderAuthenticBanner();
                 html += renderRatingScaleGuide(generalSkillLabels);
                 html += renderGenericCard(digitalSkills, "indigo-500", generalSkillLabels);
             }
         } else if (currentStep === 50) {
             // Training
+            html += renderAuthenticBanner();
             html += renderGenericCard(trainingData, "teal-500", null, true);
         } else if (currentStep === 51) {
             // Challenges
+            html += renderAuthenticBanner();
             html += renderGenericCard(challengesData, "rose-500", null, true);
         } else if (currentStep >= 70 && currentStep <= 72) {
             const map = { 70: ['sectionA', 'sectionB'], 71: ['sectionC', 'sectionD'], 72: ['sectionE'] };
@@ -566,6 +580,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (sections) {
                 const dataObj = executiveAssistantTechnicalSkills;
                 const title = 'Executive Assistant Competence';
+                html += renderAuthenticBanner();
                 html += renderRatingScaleGuide(generalSkillLabels);
                 html += renderClusterCard(dataObj, sections, title);
             }
@@ -578,6 +593,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             const sections = supportSections[currentStep];
             if (sections) {
+                 html += renderAuthenticBanner();
                  html += renderRatingScaleGuide(generalSkillLabels);
                  html += renderClusterCard(officeOrderlyTechnicalSkills, sections, "Office Orderly Competence");
             }
@@ -586,6 +602,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (execGrade) {
                 const sections = executiveStepsConfig[currentStep];
                 if (sections) {
+                    html += renderAuthenticBanner();
                     html += renderRatingScaleGuide(executiveSkillLabels);
                     html += renderExecCard(sections, "Executive Leadership Skills Audit");
                 }
@@ -597,6 +614,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (formData.cluster === 'Research, Innovation & Education' && formData.department === 'Agricultural Education (Colleges)') {
                         dataObj = educationDepartmentSkills;
                     }
+                    html += renderAuthenticBanner();
                     html += renderRatingScaleGuide(generalSkillLabels);
                     html += renderClusterCard(dataObj, sectionKeys, formData.cluster);
                 } else if (!cluster && !execGrade && !["Driver", "Office Orderly", "Executive Assistant", "Security Officer", "Cook", "Laundry Hand"].includes(formData.position)) {
@@ -806,7 +824,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 return false;
             }
-            // Experience constraint: should not exceed 50 years
+            const dobEl = document.getElementById('dateOfBirth');
+            const dobVal = dobEl ? String(dobEl.value || '').trim() : '';
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(dobVal)) {
+                alert('Validation Error: Invalid date of birth format (use YYYY-MM-DD)');
+                if (dobEl) { dobEl.focus(); dobEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                return false;
+            }
+            const parts = dobVal.split('-');
+            const y = parseInt(parts[0], 10);
+            const m = parseInt(parts[1], 10);
+            const d = parseInt(parts[2], 10);
+            const nowY = new Date().getFullYear();
+            const dt = new Date(dobVal);
+            const validDate = dt instanceof Date && !isNaN(dt) && dt.getFullYear() === y && dt.getMonth() + 1 === m && dt.getDate() === d && y >= 1900 && y <= nowY;
+            if (!validDate || dt > new Date()) {
+                alert('Validation Error: Invalid date of birth format (use YYYY-MM-DD)');
+                if (dobEl) { dobEl.focus(); dobEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                return false;
+            }
+            const emailEl = document.getElementById('email');
+            const emailVal = emailEl ? String(emailEl.value || '').trim() : '';
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+                alert('Validation Error: Invalid email address.');
+                if (emailEl) { emailEl.focus(); emailEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                return false;
+            }
+            const phoneEl = document.getElementById('phone');
+            const phoneVal = phoneEl ? String(phoneEl.value || '').trim() : '';
+            const digits = phoneVal.replace(/\D/g, '');
+            if (digits.length < 7) {
+                alert('Validation Error: Invalid phone number.');
+                if (phoneEl) { phoneEl.focus(); phoneEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                return false;
+            }
+            const qYearEl = document.getElementById('qualificationYear');
+            const qYearVal = qYearEl ? parseInt(String(qYearEl.value || '').trim(), 10) : NaN;
+            if (isNaN(qYearVal) || qYearVal < 1950 || qYearVal > nowY) {
+                alert('Validation Error: Invalid year of qualification.');
+                if (qYearEl) { qYearEl.focus(); qYearEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                return false;
+            }
+            
             const expEl = document.getElementById('experienceYears');
             const expVal = expEl ? expEl.value : '';
             if (expVal) {
@@ -1173,6 +1232,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
     function findFirstMissingField() {
+        const locTypeEl = document.getElementById('locationType');
         const order = [
             { id: 'firstName', label: 'First Name', required: true },
             { id: 'middleName', label: 'Middle Name', required: false },
@@ -1188,8 +1248,41 @@ document.addEventListener('DOMContentLoaded', function() {
             { id: 'department', label: 'Department', required: true },
             { id: 'position', label: 'Position', required: true },
             { id: 'locationType', label: 'Location', required: true },
-            { id: 'province', label: 'Province', required: function() { return (locationTypeSelect && locationTypeSelect.value === 'Province'); } },
-            { id: 'district', label: 'District', required: function() { return (locationTypeSelect && locationTypeSelect.value === 'Province'); } },
+            { id: 'province', label: 'Province', required: function() { return (locTypeEl && locTypeEl.value === 'Province'); } },
+            { id: 'district', label: 'District', required: function() { return (locTypeEl && locTypeEl.value === 'Province'); } },
+            { id: 'experienceYears', label: 'Years of Experience in Current Role', required: true }
+        ];
+        for (let f of order) {
+            const el = document.getElementById(f.id);
+            const isReq = typeof f.required === 'function' ? f.required() : f.required;
+            if (!el) continue;
+            const val = (el.value || '').trim();
+            if (isReq && !val) {
+                return { el, label: f.label };
+            }
+        }
+        return null;
+    }
+
+    function findFirstMissingFieldForNavigation() {
+        const locTypeEl = document.getElementById('locationType');
+        const order = [
+            { id: 'firstName', label: 'First Name', required: true },
+            { id: 'middleName', label: 'Middle Name', required: false },
+            { id: 'lastName', label: 'Last Name', required: true },
+            { id: 'sex', label: 'Sex', required: true },
+            { id: 'dateOfBirth', label: 'Date of Birth', required: true },
+            { id: 'email', label: 'Email Address', required: true },
+            { id: 'phone', label: 'Phone Number', required: true },
+            { id: 'educationLevel', label: 'Highest Education Level', required: true },
+            { id: 'qualificationYear', label: 'Year of Qualification', required: true },
+            { id: 'areaOfSpecialisation', label: 'Area of Specialisation', required: true },
+            { id: 'cluster', label: 'Cluster', required: true },
+            { id: 'department', label: 'Department', required: false },
+            { id: 'position', label: 'Position', required: false },
+            { id: 'locationType', label: 'Location', required: true },
+            { id: 'province', label: 'Province', required: function() { return (locTypeEl && locTypeEl.value === 'Province'); } },
+            { id: 'district', label: 'District', required: function() { return (locTypeEl && locTypeEl.value === 'Province'); } },
             { id: 'experienceYears', label: 'Years of Experience in Current Role', required: true }
         ];
         for (let f of order) {
