@@ -8,8 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let formData = {
         consent: false,
         firstName: '',
+        middleName: '',
         lastName: '',
-        gender: '',
+        sex: '',
         dateOfBirth: '',
         educationLevel: '',
         qualificationYear: '',
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cluster: '',
         department: '',
         position: '',
+        locationType: '',
         province: '',
         district: '',
         ageRange: '',
@@ -40,6 +42,74 @@ document.addEventListener('DOMContentLoaded', function() {
     const positionSelect = document.getElementById('position');
     const provinceSelect = document.getElementById('province');
     const districtSelect = document.getElementById('district');
+    const locationTypeSelect = document.getElementById('locationType');
+    const locationTypeGroup = document.getElementById('locationTypeGroup');
+    const provinceGroup = document.getElementById('provinceGroup');
+    const districtGroup = document.getElementById('districtGroup');
+    const experienceGroup = document.getElementById('experienceGroup');
+
+    // Initial dependency: Province/District depend on Location selection
+    if (provinceSelect) { provinceSelect.disabled = true; provinceSelect.required = false; }
+    if (districtSelect) { districtSelect.disabled = true; districtSelect.required = false; }
+
+    // Helpers to apply location modes deterministically
+    function applyHeadOfficeMode() {
+        formData.locationType = 'Head Office';
+        if (locationTypeSelect) {
+            locationTypeSelect.value = 'Head Office';
+            locationTypeSelect.disabled = true;
+        }
+        if (provinceSelect) {
+            let hoOpt = Array.from(provinceSelect.options).find(o => o.value === 'Head Office');
+            if (!hoOpt) {
+                hoOpt = document.createElement('option');
+                hoOpt.value = 'Head Office';
+                hoOpt.textContent = 'Head Office';
+                provinceSelect.appendChild(hoOpt);
+            }
+            provinceSelect.value = 'Head Office';
+            provinceSelect.disabled = false;
+            provinceSelect.required = false;
+        }
+        if (districtSelect) {
+            let hoOptD = Array.from(districtSelect.options).find(o => o.value === 'Head Office');
+            if (!hoOptD) {
+                hoOptD = document.createElement('option');
+                hoOptD.value = 'Head Office';
+                hoOptD.textContent = 'Head Office';
+                districtSelect.appendChild(hoOptD);
+            }
+            districtSelect.value = 'Head Office';
+            districtSelect.disabled = false;
+            districtSelect.required = false;
+        }
+        if (provinceGroup) provinceGroup.classList.add('d-none');
+        if (districtGroup) districtGroup.classList.add('d-none');
+        if (experienceGroup) experienceGroup.classList.add('col-sm-8');
+    }
+
+    function applyProvinceMode() {
+        formData.locationType = 'Province';
+        if (locationTypeSelect) {
+            locationTypeSelect.value = 'Province';
+            locationTypeSelect.disabled = false;
+        }
+        if (provinceSelect) {
+            provinceSelect.disabled = false;
+            provinceSelect.required = true;
+            Array.from(provinceSelect.options).forEach(opt => { if (opt.value === 'Head Office') opt.remove(); });
+            provinceSelect.value = '';
+        }
+        if (districtSelect) {
+            districtSelect.disabled = true;
+            districtSelect.required = true;
+            districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
+            Array.from(districtSelect.options).forEach(opt => { if (opt.value === 'Head Office') opt.remove(); });
+        }
+        if (provinceGroup) provinceGroup.classList.remove('d-none');
+        if (districtGroup) districtGroup.classList.remove('d-none');
+        if (experienceGroup) experienceGroup.classList.remove('col-sm-8');
+    }
 
     // Cluster Step Configuration
     // Maps cluster name -> step ranges -> sections
@@ -114,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
             sections: {
                 32: ['sectionA', 'sectionB'],
                 33: ['sectionC', 'sectionD'],
-                34: ['sectionH'],
+                34: ['sectionE', 'sectionH'],
                 35: ['sectionR']
             }
         }
@@ -160,28 +230,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const execGrade = getExecutiveGrade(selectedPosition);
 
         if (execGrade) {
-            // Executive flow
             return [1, 2, 3, 4, 5, 40, 41, 42, 43, 50, 51];
         }
 
         if (selectedPosition === "Driver") {
-             return [1, 2, 3, 60, 61, 62, 50, 51];
+             return [1, 60, 61, 62, 50, 51];
         }
 
-        if (selectedPosition === "Executive Assistant" || selectedPosition === "Executive Secretary") {
-             return [1, 2, 3, 70, 71, 72, 50, 51];
+        if (selectedPosition === "Executive Assistant") {
+             return [1, 70, 71, 72, 50, 51];
         }
 
         if (["Office Orderly", "Security Officer", "Cook", "Laundry Hand"].includes(selectedPosition)) {
-             return [1, 2, 3, 63, 64, 65, 50, 51];
+             if (formData.department !== "Agricultural Education (Colleges)") {
+                 return [1, 63, 64, 65, 50, 51];
+             }
+             // For Education Colleges, follow cluster mapping to show position-specific content
         }
 
         if (selectedCluster && clusterConfig[selectedCluster]) {
-            return [1, 2, 3, ...clusterConfig[selectedCluster].steps, 50, 51];
+            return [1, ...clusterConfig[selectedCluster].steps, 50, 51];
         }
 
         // Default fallback
-        return [1, 2, 3, 4, 50, 51]; 
+        return [1, 4, 50, 51]; 
     }
 
     function getSectionStyle(title) {
@@ -377,6 +449,33 @@ document.addEventListener('DOMContentLoaded', function() {
             questions = [...questions, ...roleQuestions];
         }
 
+        if (!execGrade && section.positionSpecific) {
+            const pos = (formData.position || '').toLowerCase();
+            let matched = null;
+            if (pos.includes('principal')) matched = 'Principal';
+            else if (pos.includes('vice principal')) matched = 'Vice Principal';
+            else if (pos.includes('lecturer')) matched = 'Lecturer';
+            else if (pos.includes('educational officer')) matched = 'Lecturer';
+            else if (pos.includes('farm manager')) matched = 'Farm Manager';
+            else if (pos.includes('agricultural assistant')) matched = 'Agriculture Assistant';
+            else if (pos.includes('laboratory technician')) matched = 'Laboratory Technician';
+            else if (pos.includes('librarian assistant')) matched = 'Librarian Assistant';
+            else if (pos.includes('librarian')) matched = 'Librarian';
+            else if (pos.includes('agriculture officer')) matched = 'Agriculture Officer';
+            else if (pos.includes('artisan')) matched = 'Artisan';
+            else if (pos.includes('foreman')) matched = 'Foreman';
+            else if (pos.includes('warden')) matched = 'Warden';
+            else if (pos.includes('matron')) matched = 'Matron';
+            else if (pos.includes('cook')) matched = 'Cook';
+            else if (pos.includes('kitchen hand')) matched = 'Kitchen Hand';
+            else if (pos.includes('waiter')) matched = 'Waiter';
+            else if (pos.includes('watchman')) matched = 'Watchman';
+            else if (pos.includes('general hand')) matched = 'General Hand';
+            if (matched && section.positionSpecific[matched]) {
+                questions = [...questions, ...section.positionSpecific[matched]];
+            }
+        }
+
         let questionsHtml = questions.map((q, idx) => {
             let qNum;
             if (/^\d+$/.test(letter)) {
@@ -408,7 +507,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function renderRatingScaleGuide(labels) {
-        const items = (labels || generalSkillLabels).map(l => `<li class="mb-1"><span class="fw-semibold">${l.val}. ${l.label}</span></li>`).join('');
+        const isGeneral = labels === generalSkillLabels;
+        if (isGeneral) {
+            return `
+            <div class="alert alert-info mb-3">
+              <h6 class="alert-heading mb-2">Rating Scale</h6>
+              <ol class="mb-0 small ps-3">
+                <li class="mb-1"><span class="fw-semibold">Do not have these skills:</span> <span>This skill is completely new to me.</span></li>
+                <li class="mb-1"><span class="fw-semibold">Somewhat familiar:</span> <span>I have slight knowledge relating to elements of this skill.</span></li>
+                <li class="mb-1"><span class="fw-semibold">Basic level:</span> <span>My skills correspond to the skills needed.</span></li>
+                <li class="mb-1"><span class="fw-semibold">Intermediate level:</span> <span>My skills need to be further developed to cope with some of the tasks and duties of my job/business.</span></li>
+                <li><span class="fw-semibold">Advanced level:</span> <span>I have the skills to carry out more complex tasks and duties.</span></li>
+              </ol>
+            </div>`;
+        }
+        const items = (labels || executiveSkillLabels).map(l => `<li class="mb-1"><span class="fw-semibold">${l.label}</span></li>`).join('');
         return `
         <div class="alert alert-info mb-3">
           <h6 class="alert-heading mb-2">Rating Scale</h6>
@@ -436,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Digital Skills or Exec C/D
             if (execGrade) {
                 html += renderRatingScaleGuide(executiveSkillLabels);
-                html += renderExecCard(['sectionC', 'sectionD'], "Executive Leadership Skills Audit (Part 2)");
+                html += renderExecCard(['sectionC', 'sectionD'], "Executive Leadership Skills Audit");
             } else {
                 html += renderRatingScaleGuide(generalSkillLabels);
                 html += renderGenericCard(digitalSkills, "indigo-500", generalSkillLabels);
@@ -448,16 +561,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Challenges
             html += renderGenericCard(challengesData, "rose-500", null, true);
         } else if (currentStep >= 70 && currentStep <= 72) {
-            // Executive Secretary Steps
-            const secretarySections = {
-                70: ['sectionA', 'sectionB'],
-                71: ['sectionC', 'sectionD'],
-                72: ['sectionE']
-            };
-            const sections = secretarySections[currentStep];
+            const map = { 70: ['sectionA', 'sectionB'], 71: ['sectionC', 'sectionD'], 72: ['sectionE'] };
+            const sections = map[currentStep];
             if (sections) {
-                 html += renderRatingScaleGuide(generalSkillLabels);
-                 html += renderClusterCard(executiveSecretaryTechnicalSkills, sections, "Executive Secretary Competence");
+                const dataObj = executiveAssistantTechnicalSkills;
+                const title = 'Executive Assistant Competence';
+                html += renderRatingScaleGuide(generalSkillLabels);
+                html += renderClusterCard(dataObj, sections, title);
             }
         } else if (currentStep >= 63 && currentStep <= 65) {
             // Support Staff (Office Orderly and similar) Steps
@@ -477,15 +587,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 const sections = executiveStepsConfig[currentStep];
                 if (sections) {
                     html += renderRatingScaleGuide(executiveSkillLabels);
-                    html += renderExecCard(sections, "Executive Leadership Skills Audit (Part " + (currentStep === 4 ? 3 : (currentStep === 5 ? 4 : 5)) + ")");
+                    html += renderExecCard(sections, "Executive Leadership Skills Audit");
                 }
             } else {
                 const cluster = clusterConfig[formData.cluster];
                 if (cluster && cluster.sections[currentStep]) {
                     const sectionKeys = cluster.sections[currentStep];
+                    let dataObj = cluster.data;
+                    if (formData.cluster === 'Research, Innovation & Education' && formData.department === 'Agricultural Education (Colleges)') {
+                        dataObj = educationDepartmentSkills;
+                    }
                     html += renderRatingScaleGuide(generalSkillLabels);
-                    html += renderClusterCard(cluster.data, sectionKeys, formData.cluster);
-                } else if (!cluster && !execGrade && !["Driver", "Office Orderly", "Executive Secretary", "Executive Assistant", "Security Officer", "Cook", "Laundry Hand"].includes(formData.position)) {
+                    html += renderClusterCard(dataObj, sectionKeys, formData.cluster);
+                } else if (!cluster && !execGrade && !["Driver", "Office Orderly", "Executive Assistant", "Security Officer", "Cook", "Laundry Hand"].includes(formData.position)) {
                     // Fallback message if no cluster selected
                     html += `
                     <div class="alert alert-warning text-center" role="alert">
@@ -531,20 +645,101 @@ document.addEventListener('DOMContentLoaded', function() {
             return renderSection(executiveTechnicalSkills[key], key, executiveSkillLabels);
         }).join('');
 
+        const banner = `
+        <div class="alert alert-info mb-3">
+          <p class="mb-2"><span class="fw-bold">Purpose:</span> This questionnaire assesses skills and competencies (not performance appraisal) of senior leadership to determine institutional readiness to deliver AFSRTS II and Vision 2030 outcomes.</p>
+          <h6 class="alert-heading mb-2">Authentic Response Appeal</h6>
+          <p class="mb-1 small">This is a developmental and diagnostic instrument. Authentic responses are essential to ensure that capacity-building, institutional reform, and policy support interventions are legitimate, targeted, and effective.</p>
+          <p class="mb-0 small">Responses will be aggregated and anonymised.</p>
+        </div>`;
+
         return `
         <div class="card border-danger mb-3">
           <div class="card-body">
             <h3 class="h5 fw-semibold">${title}</h3>
             <p class="text-muted small">Role: ${getExecutiveGrade(formData.position)}</p>
-            <div class="mt-3">${contentHtml}</div>
+            <div class="mt-3">${banner + contentHtml}</div>
           </div>
         </div>`;
     }
 
     function renderClusterCard(dataObj, sectionKeys, clusterName) {
-        let contentHtml = sectionKeys.map(key => {
-            return renderSection(dataObj[key], key, generalSkillLabels);
-        }).join('');
+        let contentHtml = '';
+        if (clusterName === "Extension & Advisory Services") {
+            const banner = `
+            <div class="d-flex align-items-start p-3 rounded-3 mb-3 border" style="background:linear-gradient(90deg,#f8fafc,#ffffff)">
+              <div class="me-3" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div><div class="fw-semibold mb-1">Authentic Response Appeal</div><div class="small text-muted">This assessment supports legitimate capacity development and extension effectiveness. Authentic responses ensure credible and useful interventions.</div></div>
+            </div>`;
+            const parts = sectionKeys.map(key => {
+                return renderSection(dataObj[key], key, generalSkillLabels);
+            });
+            contentHtml = banner + parts.join('');
+        } else if (clusterName === "Research, Innovation & Education") {
+            const banner = `
+            <div class="d-flex align-items-start p-3 rounded-3 mb-3 border" style="background:linear-gradient(90deg,#f8fafc,#ffffff)">
+              <div class="me-3" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div><div class="fw-semibold mb-1">Authentic Response Appeal</div><div class="small text-muted">This assessment supports legitimate capacity development and research effectiveness. Authentic responses ensure credible and useful interventions.</div></div>
+            </div>`;
+            const parts = sectionKeys.map(key => {
+                return renderSection(dataObj[key], key, generalSkillLabels);
+            });
+            contentHtml = banner + parts.join('');
+        } else if (clusterName === "Veterinary & Animal Health Services") {
+            const banner = `
+            <div class="d-flex align-items-start p-3 rounded-3 mb-3 border" style="background:linear-gradient(90deg,#fffbea,#ffffff)">
+              <div class="me-3" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div><div class="fw-semibold mb-1">Authentic Response Appeal</div><div class="small text-muted">This assessment supports legitimate capacity development and animal health effectiveness. Authentic responses ensure credible and useful interventions.</div></div>
+            </div>`;
+            const parts = sectionKeys.map(key => {
+                return renderSection(dataObj[key], key, generalSkillLabels);
+            });
+            contentHtml = banner + parts.join('');
+        } else if (clusterName === "Engineering, Infrastructure & Technical Services") {
+            const banner = `
+            <div class="d-flex align-items-start p-3 rounded-3 mb-3 border" style="background:linear-gradient(90deg,#f0f7ff,#ffffff)">
+              <div class="me-3" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div><div class="fw-semibold mb-1">Authentic Response Appeal</div><div class="small text-muted">This assessment supports legitimate capacity development and infrastructure effectiveness. Authentic responses ensure credible and useful interventions.</div></div>
+            </div>`;
+            const parts = sectionKeys.map(key => {
+                return renderSection(dataObj[key], key, generalSkillLabels);
+            });
+            contentHtml = banner + parts.join('');
+        } else if (clusterName === "Business Development, Markets & Value Chains") {
+            const banner = `
+            <div class="d-flex align-items-start p-3 rounded-3 mb-3 border" style="background:linear-gradient(90deg,#f8fafc,#ffffff)">
+              <div class="me-3" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div><div class="fw-semibold mb-1">Authentic Response Appeal</div><div class="small text-muted">This assessment supports legitimate capacity development and market effectiveness. Authentic responses ensure credible and useful interventions.</div></div>
+            </div>`;
+            const parts = sectionKeys.map(key => {
+                return renderSection(dataObj[key], key, generalSkillLabels);
+            });
+            contentHtml = banner + parts.join('');
+        } else if (clusterName === "Land Administration, Planning & Mapping") {
+            const banner = `
+            <div class="d-flex align-items-start p-3 rounded-3 mb-3 border" style="background:linear-gradient(90deg,#f3faf3,#ffffff)">
+              <div class="me-3" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div><div class="fw-semibold mb-1">Authentic Response Appeal</div><div class="small text-muted">This assessment supports legitimate capacity development and land administration effectiveness. Authentic responses ensure credible and useful interventions.</div></div>
+            </div>`;
+            const parts = sectionKeys.map(key => {
+                return renderSection(dataObj[key], key, generalSkillLabels);
+            });
+            contentHtml = banner + parts.join('');
+        } else if (clusterName === "Corporate, Governance & Support Services") {
+            const banner = `
+            <div class="d-flex align-items-start p-3 rounded-3 mb-3 border" style="background:linear-gradient(90deg,#f8fafc,#ffffff)">
+              <div class="me-3" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div><div class="fw-semibold mb-1">Authentic Response Appeal</div><div class="small text-muted">This assessment supports legitimate capacity development and corporate/support services effectiveness. Authentic responses ensure credible and useful interventions.</div></div>
+            </div>`;
+            const parts = sectionKeys.map(key => {
+                return renderSection(dataObj[key], key, generalSkillLabels);
+            });
+            contentHtml = banner + parts.join('');
+        } else {
+            contentHtml = sectionKeys.map(key => {
+                return renderSection(dataObj[key], key, generalSkillLabels);
+            }).join('');
+        }
 
         const colorMap = {
             "Extension & Advisory Services": "orange-500",
@@ -554,17 +749,20 @@ document.addEventListener('DOMContentLoaded', function() {
             "Business Development, Markets & Value Chains": "yellow-500",
             "Land Administration, Planning & Mapping": "green-600",
             "Corporate, Governance & Support Services": "slate-600",
-            "Executive Secretary Competence": "pink-600",
             "Office Orderly Competence": "teal-600"
         };
         const color = colorMap[clusterName] || "primary";
 
         return `
-        <div class="card border-secondary mb-3">
+        <div class="card shadow-sm mb-4 border-0">
+          <div class="card-header bg-white border-0">
+            <div class="d-flex align-items-center justify-content-between">
+              <h3 class="h5 fw-semibold m-0">Technical Skills</h3>
+              <span class="badge bg-secondary">${clusterName}</span>
+            </div>
+          </div>
           <div class="card-body">
-            <h3 class="h5 fw-semibold">Technical Skills</h3>
-            <p class="text-muted small">Cluster: ${clusterName}</p>
-            <div class="mt-3">${contentHtml}</div>
+            <div class="mt-2">${contentHtml}</div>
           </div>
         </div>`;
     }
@@ -577,7 +775,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const isCurrent = currentStep === s;
             html += `
             <div class="d-flex align-items-center flex-shrink-0">
-              <button onclick="window.jumpToStep(${s})" class="btn btn-sm ${isCurrent || isCompleted ? 'btn-primary' : 'btn-outline-secondary'} rounded-circle d-inline-flex align-items-center justify-content-center" style="width:2.25rem;height:2.25rem;">
+              <button type="button" onclick="window.jumpToStep(${s})" class="btn btn-sm ${isCurrent || isCompleted ? 'btn-primary' : 'btn-outline-secondary'} rounded-circle d-inline-flex align-items-center justify-content-center" style="width:2.25rem;height:2.25rem;">
                 ${isCompleted ? '✓' : (index + 1)}
               </button>
               ${index < activeSteps.length - 1 ? `<div class="mx-2" style="width:2rem;height:2px;background:${isCompleted ? '#0d6efd' : '#dee2e6'}"></div>` : ''}
@@ -599,20 +797,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateStep() {
         if (currentStep === 1) {
-            // Check HTML5 validation
-            if (!form.reportValidity()) return false;
-            // Additional checks
-            if (!formData.cluster) {
-                alert("Please select a Cluster.");
+            const firstMissing = findFirstMissingField();
+            if (firstMissing) {
+                alert(`Please enter ${firstMissing.label}.`);
+                if (firstMissing.el) {
+                    firstMissing.el.focus();
+                    firstMissing.el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
                 return false;
             }
-            if (!formData.department) {
-                alert("Please select a Department.");
-                return false;
-            }
-            if (!formData.position) {
-                alert("Please select a Position.");
-                return false;
+            // Experience constraint: should not exceed 50 years
+            const expEl = document.getElementById('experienceYears');
+            const expVal = expEl ? expEl.value : '';
+            if (expVal) {
+                const nums = (expVal.match(/\d+/g) || []).map(n => parseInt(n, 10));
+                if (nums.length) {
+                    const maxNum = Math.max.apply(null, nums);
+                    if (maxNum > 50) {
+                        alert('Years of Experience must not exceed 50 years.');
+                        expEl.focus();
+                        return false;
+                    }
+                } else if (/More than\s*(\d+)/i.test(expVal)) {
+                    const m = expVal.match(/More than\s*(\d+)/i);
+                    const base = parseInt(m[1], 10);
+                    if (base >= 50) {
+                        alert('Years of Experience must not exceed 50 years.');
+                        expEl.focus();
+                        return false;
+                    }
+                }
             }
             return true;
         }
@@ -676,42 +890,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     submitBtn.addEventListener('click', function(e) {
         e.preventDefault();
-
-        const dobInput = document.getElementById('dateOfBirth');
-        const dobVal = (dobInput && dobInput.value) ? dobInput.value.trim() : '';
-
-        if (!dobVal) {
-            alert('Please enter your Date of Birth.');
-            if (dobInput) dobInput.focus();
-            return;
-        }
-
-        const m = dobVal.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-        if (!m) {
-            alert('Invalid Date of Birth format. Use YYYY-MM-DD');
-            if (dobInput) dobInput.focus();
-            return;
-        }
-
-        const year = parseInt(m[1], 10);
-        const month = parseInt(m[2], 10);
-        const day = parseInt(m[3], 10);
-        const dob = new Date(year, month - 1, day);
-        const today = new Date();
-
-        if (dob > today) {
-            alert('Date of Birth cannot be in the future.');
-            if (dobInput) dobInput.focus();
-            return;
-        }
-
-        let age = today.getFullYear() - year;
-        const beforeBirthday = (today.getMonth() < (month - 1)) || (today.getMonth() === (month - 1) && today.getDate() < day);
-        if (beforeBirthday) age--;
-
-        if (age < 18) {
-            alert('You must be at least 18 years old to submit.');
-            if (dobInput) dobInput.focus();
+        const firstMissing = findFirstMissingField();
+        if (firstMissing) {
+            alert(`Please enter ${firstMissing.label}.`);
+            if (firstMissing.el) {
+                const targetId = firstMissing.el.id;
+                window.jumpToStep(1);
+                setTimeout(() => {
+                    const el = document.getElementById(targetId);
+                    if (el) {
+                        el.focus();
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 50);
+            }
             return;
         }
 
@@ -760,6 +952,42 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update UI to reflect potentially reset steps
         updateUI();
+
+        // Special rule: Agricultural Education (Colleges) must use Province/District only
+        if (this.value === 'Agricultural Education (Colleges)') {
+            applyProvinceMode();
+            if (locationTypeGroup) locationTypeGroup.classList.add('d-none');
+
+            // Ensure province/district visible and required
+            if (provinceGroup) provinceGroup.classList.remove('d-none');
+            if (districtGroup) districtGroup.classList.remove('d-none');
+            if (provinceSelect) {
+                provinceSelect.disabled = false;
+                provinceSelect.required = true;
+                // Remove any injected Head Office option
+                Array.from(provinceSelect.options).forEach(opt => { if (opt.value === 'Head Office') opt.remove(); });
+                provinceSelect.value = '';
+            }
+            if (districtSelect) {
+                districtSelect.disabled = true; // until province is chosen
+                districtSelect.required = true;
+                districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
+                Array.from(districtSelect.options).forEach(opt => { if (opt.value === 'Head Office') opt.remove(); });
+            }
+        } else if (this.value === 'Office of the Permanent Secretary') {
+            // Special rule: Office of the Permanent Secretary automatically uses Head Office
+            applyHeadOfficeMode();
+            if (locationTypeGroup) locationTypeGroup.classList.add('d-none');
+        } else {
+            // Restore Location selection for other departments
+            if (locationTypeSelect) {
+                locationTypeSelect.disabled = false;
+                if (!locationTypeSelect.value) {
+                    // leave as-is for user to choose
+                }
+            }
+            if (locationTypeGroup) locationTypeGroup.classList.remove('d-none');
+        }
     });
 
     positionSelect.addEventListener('change', function() {
@@ -768,7 +996,20 @@ document.addEventListener('DOMContentLoaded', function() {
         if (gradeInput) {
              gradeInput.value = grade || '';
         }
+        // Populate all multi-level steps without changing the current step
+        updateUI();
     });
+
+    // Location Type toggle: Head Office vs Province
+    if (locationTypeSelect) {
+        locationTypeSelect.addEventListener('change', function() {
+            if (this.value === 'Head Office') {
+                applyHeadOfficeMode();
+            } else {
+                applyProvinceMode();
+            }
+        });
+    }
 
     provinceSelect.addEventListener('change', function() {
         formData.province = this.value;
@@ -791,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Bind other static inputs to formData
-    ['firstName', 'lastName', 'gender', 'dateOfBirth', 'educationLevel', 'qualificationYear', 'areaOfSpecialisation', 'email', 'phone', 'experienceYears'].forEach(id => {
+    ['firstName', 'middleName', 'lastName', 'sex', 'dateOfBirth', 'educationLevel', 'qualificationYear', 'areaOfSpecialisation', 'email', 'phone', 'experienceYears'].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
             el.addEventListener('change', function() {
@@ -931,3 +1172,34 @@ document.addEventListener('DOMContentLoaded', function() {
     updateUI();
 
 });
+    function findFirstMissingField() {
+        const order = [
+            { id: 'firstName', label: 'First Name', required: true },
+            { id: 'middleName', label: 'Middle Name', required: false },
+            { id: 'lastName', label: 'Last Name', required: true },
+            { id: 'sex', label: 'Sex', required: true },
+            { id: 'dateOfBirth', label: 'Date of Birth', required: true },
+            { id: 'email', label: 'Email Address', required: true },
+            { id: 'phone', label: 'Phone Number', required: true },
+            { id: 'educationLevel', label: 'Highest Education Level', required: true },
+            { id: 'qualificationYear', label: 'Year of Qualification', required: true },
+            { id: 'areaOfSpecialisation', label: 'Area of Specialisation', required: true },
+            { id: 'cluster', label: 'Cluster', required: true },
+            { id: 'department', label: 'Department', required: true },
+            { id: 'position', label: 'Position', required: true },
+            { id: 'locationType', label: 'Location', required: true },
+            { id: 'province', label: 'Province', required: function() { return (locationTypeSelect && locationTypeSelect.value === 'Province'); } },
+            { id: 'district', label: 'District', required: function() { return (locationTypeSelect && locationTypeSelect.value === 'Province'); } },
+            { id: 'experienceYears', label: 'Years of Experience in Current Role', required: true }
+        ];
+        for (let f of order) {
+            const el = document.getElementById(f.id);
+            const isReq = typeof f.required === 'function' ? f.required() : f.required;
+            if (!el) continue;
+            const val = (el.value || '').trim();
+            if (isReq && !val) {
+                return { el, label: f.label };
+            }
+        }
+        return null;
+    }

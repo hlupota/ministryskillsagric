@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `firstName` VARCHAR(255) NOT NULL,
   `lastName` VARCHAR(255) NOT NULL,
   `gender` VARCHAR(50) DEFAULT NULL,
+  `sex` VARCHAR(50) DEFAULT NULL,
   `dateOfBirth` DATE DEFAULT NULL,
   `age` INT DEFAULT NULL,
   `educationLevel` VARCHAR(255) DEFAULT NULL,

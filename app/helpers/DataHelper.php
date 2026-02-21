@@ -11,8 +11,7 @@ class DataHelper {
             "Masvingo" => ["Bikita", "Chiredzi", "Chivi", "Gutu", "Masvingo", "Mwenezi", "Zaka"],
             "Matabeleland North" => ["Binga", "Bubi", "Hwange", "Lupane", "Nkayi", "Tsholotsho", "Umguza"],
             "Matabeleland South" => ["Beitbridge", "Bulilima", "Gwanda", "Insiza", "Mangwe", "Matobo", "Umzingwane"],
-            "Midlands" => ["Chirumhanzu", "Gokwe North", "Gokwe South", "Gweru", "Kwekwe", "Mberengwa", "Shurugwi", "Zvishavane"],
-            "Head Office" => ["Head Office"]
+            "Midlands" => ["Chirumhanzu", "Gokwe North", "Gokwe South", "Gweru", "Kwekwe", "Mberengwa", "Shurugwi", "Zvishavane"]
         ];
     }
 
@@ -21,8 +20,8 @@ class DataHelper {
             "Agricultural Education (Colleges)" => [
                 "Director", "Deputy Director",
                 "Principal", "Vice Principal", "Educational Officer", "Lecturer",
-                "Farm Manager", "Agricultural Assistant", "Laboratory Technician", "Warden",
-                "Security Officer", "Cook", "Laundry Hand"
+                "Farm Manager", "Agricultural Assistant", "Laboratory Technician", "Warden", "Matron", "Artisan", "Foreman",
+                "Security Officer", "Cook", "Kitchen Hand", "Laundry Hand", "Waiter", "Watchman", "General Hand"
             ],
             "Crop Development and Protection" => [
                 "Chief Director", "Director", "Deputy Director", "Agronomist", 
@@ -102,11 +101,11 @@ class DataHelper {
                 "Chief Director", "Surveyor General", "Deputy Surveyor General", "Principal Land Surveyor", "Land Surveyor", 
                 "Cartographer", "GIS Specialist", "Executive Assistant"
             ],
-            "Office of the Permanent Secretary" => ["Permanent Secretary", "Executive Assistant", "Executive Secretary", "Protocol Officer", "Driver"],
-            "Human Resources Management Directorate" => ["Director", "Deputy Director", "Human Resources Officer", "Executive Assistant", "Executive Secretary"],
+            "Office of the Permanent Secretary" => ["Permanent Secretary", "Executive Assistant", "Protocol Officer", "Driver"],
+            "Human Resources Management Directorate" => ["Director", "Deputy Director", "Human Resources Officer", "Executive Assistant"],
             "Finance and Administration" => [
                 "Director", "Deputy Director", "Chief Accountant", "Accountant", 
-                "Driver", "Office Orderly", "Security Officer", "Cook", "Laundry Hand", "Executive Assistant", "Executive Secretary"
+                "Driver", "Office Orderly", "Security Officer", "Cook", "Laundry Hand", "Executive Assistant"
             ],
             "Strategic Policy Planning and Monitoring and Evaluation (SPP&M&E)" => ["Director", "Deputy Director", "Deputy Director", "Strategic Planning Officer", "Monitoring and Evaluation Officer", "Executive Assistant"],
             "Gender Mainstreaming and Wellness" => ["Director", "Deputy Director", "Officer - Gender Mainstreaming and Wellness", "Executive Assistant"],

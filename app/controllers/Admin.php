@@ -1,10 +1,12 @@
 <?php
+require_once APPROOT . '/helpers/DataHelper.php';
 class Admin extends Controller {
     private $employeeModel;
     private $userModel;
     public function __construct() {
         if (!isset($_SESSION['user_id'])) {
             header('location: ' . URLROOT . '/users/login');
+            exit;
         }
 
         $this->employeeModel = $this->model('Employee');
@@ -12,26 +14,50 @@ class Admin extends Controller {
     }
 
     public function index() {
-        if (isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['ZIMSTATS','AGRIC'])) {
-            header('location: ' . URLROOT . '/admin/analytics');
-            exit;
-        }
+        // Allow all authenticated roles to access the main dashboard
         $employees = $this->employeeModel->getEmployees();
 
         // Calculate Stats
         $departments = [];
         $clusters = [];
         $positions = [];
+        $sexCounts = ['Male' => 0, 'Female' => 0, 'Other' => 0];
+        $accessedCount = 0;
 
         foreach ($employees as $emp) {
             if ($emp->department) $departments[] = $emp->department;
             if ($emp->cluster) $clusters[] = $emp->cluster;
             if ($emp->position) $positions[] = $emp->position;
+            // Sex summary
+            $sexVal = !empty($emp->sex) ? $emp->sex : (!empty($emp->gender) ? $emp->gender : '');
+            if (!empty($sexVal)) {
+                $g = ucfirst(strtolower($sexVal));
+                if (!isset($sexCounts[$g])) { $sexCounts[$g] = 0; }
+                $sexCounts[$g]++;
+            }
+            // Accessed Site: has captured responses
+            if (!empty($emp->responses)) {
+                $decoded = json_decode($emp->responses, true);
+                if (is_array($decoded) && count($decoded) > 0) { $accessedCount++; }
+            }
         }
 
         $uniqueDepartments = count(array_unique($departments));
         $uniqueClusters = count(array_unique($clusters));
         $uniquePositions = count(array_unique($positions));
+
+        // Build master lists for filters (independent of captured data)
+        $clustersMap = DataHelper::getClusters();
+        $clusterNames = array_keys($clustersMap);
+        $deptNames = [];
+        foreach ($clustersMap as $c => $depts) { foreach ($depts as $d) { $deptNames[$d] = true; } }
+        $deptNames = array_keys($deptNames);
+        $deptPositionsMap = DataHelper::getDepartments();
+        $positionNames = [];
+        foreach ($deptPositionsMap as $d => $positions) { foreach ($positions as $p) { $positionNames[$p] = true; } }
+        $positionNames = array_keys($positionNames);
+        $locationsMap = DataHelper::getLocations();
+        $provinceNames = array_keys($locationsMap);
 
         $data = [
             'employees' => $employees,
@@ -39,7 +65,15 @@ class Admin extends Controller {
                 'responses' => count($employees),
                 'departments' => $uniqueDepartments,
                 'clusters' => $uniqueClusters,
-                'positions' => $uniquePositions
+                'positions' => $uniquePositions,
+                'sex' => $sexCounts,
+                'accessed' => $accessedCount
+            ],
+            'filters' => [
+                'clusters' => $clusterNames,
+                'departments' => $deptNames,
+                'positions' => $positionNames,
+                'provinces' => $provinceNames
             ]
         ];
 
@@ -122,7 +156,7 @@ class Admin extends Controller {
         $experience = ['Less than 1 year' => 0, '1-2 years' => 0, '3-5 years' => 0, '6-10 years' => 0, 'Over 10 years' => 0];
         $provinceCounts = [];
         $educationCounts = [];
-        $genderCounts = ['Male' => 0, 'Female' => 0, 'Other' => 0];
+        $sexCounts = ['Male' => 0, 'Female' => 0, 'Other' => 0];
         $positionCounts = [];
 
         foreach ($employees as $emp) {
@@ -148,10 +182,11 @@ class Admin extends Controller {
                 if (!isset($educationCounts[$emp->educationLevel])) $educationCounts[$emp->educationLevel] = 0;
                 $educationCounts[$emp->educationLevel]++;
             }
-            if (!empty($emp->gender)) {
-                $g = ucfirst(strtolower($emp->gender));
-                if (!isset($genderCounts[$g])) $genderCounts[$g] = 0;
-                $genderCounts[$g]++;
+            $sexVal = !empty($emp->sex) ? $emp->sex : (!empty($emp->gender) ? $emp->gender : '');
+            if (!empty($sexVal)) {
+                $g = ucfirst(strtolower($sexVal));
+                if (!isset($sexCounts[$g])) $sexCounts[$g] = 0;
+                $sexCounts[$g]++;
             }
             if (!empty($emp->position)) {
                 if (!isset($positionCounts[$emp->position])) $positionCounts[$emp->position] = 0;
@@ -179,7 +214,7 @@ class Admin extends Controller {
             'experience' => $experience,
             'province_counts' => $provinceCounts,
             'education_counts' => $educationCounts,
-            'gender_counts' => $genderCounts,
+            'sex_counts' => $sexCounts,
             'top_departments' => $topDepartments,
             'top_positions' => $topPositions,
             'unique_departments' => $uniqueDepartments,
@@ -242,35 +277,62 @@ class Admin extends Controller {
         // 1. Get Question Mappings
         $questionMap = $this->getQuestionMappings();
         
-        // 2. Get Employees
-        $employees = $this->employeeModel->getEmployees();
+        // 2. Get Employees with optional filters
+        $filters = [
+            'cluster' => isset($_GET['cluster']) ? trim($_GET['cluster']) : '',
+            'department' => isset($_GET['department']) ? trim($_GET['department']) : '',
+            'position' => isset($_GET['position']) ? trim($_GET['position']) : '',
+            'province' => isset($_GET['province']) ? trim($_GET['province']) : ''
+        ];
+        $employees = $this->employeeModel->getEmployeesFiltered($filters);
 
-        // 3. Set Headers
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="skills_audit_export_' . date('Y-m-d') . '.csv"');
+        // 3. Set Headers for Excel (XLS via HTML table)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="skills_audit_export_' . date('Y-m-d') . '.xls"');
 
-        // 4. Open Output Stream
-        $output = fopen('php://output', 'w');
-
-        // 5. Define Standard Headers
+        // 4. Define Standard Headers per requested layout
         $headers = [
-            'ID', 'First Name', 'Last Name', 'Gender', 'Date of Birth', 'Age',
-            'Education Level', 'Province', 'District', 'Cluster', 
-            'Department', 'Position', 'Grade', 'Experience Years', 'Created At'
+            'No', 'Location', 'Province', 'District', 'Cluster', 'Department', 'Position',
+            'First Name', 'Middle Name', 'Last Name', 'Sex',
+            'Date of Birth', 'Age', 'Education Level', 'Qualification Year', 'Area Of Specialisation', 'Age Range', 'Email', 'Phone',
+            'Grade', 'Experience Years', 'Created At'
         ];
 
-        // 6. Collect All Unique Question IDs from Map (and any extra from responses if needed)
-        // We will use the map keys as the master list of questions to ensure good ordering/naming
-        $questionKeys = array_keys($questionMap);
-        
-        // Add Question Text to Headers
-        foreach ($questionKeys as $key) {
-            $headers[] = $questionMap[$key]; // Use the full text
+        // 6. Collect unique question IDs present in filtered employee responses
+        $presentKeys = [];
+        foreach ($employees as $emp) {
+            $responses = json_decode($emp->responses ?? '{}', true);
+            if (is_array($responses)) {
+                foreach ($responses as $k => $v) { $presentKeys[$k] = true; }
+            }
         }
 
-        fputcsv($output, $headers);
+        // Order keys by the mapping order when available, include any unmapped keys at the end
+        $orderedMapKeys = array_keys($questionMap);
+        $questionKeys = [];
+        foreach ($orderedMapKeys as $mk) { if (isset($presentKeys[$mk])) { $questionKeys[] = $mk; unset($presentKeys[$mk]); } }
+        if (!empty($presentKeys)) { $questionKeys = array_merge($questionKeys, array_keys($presentKeys)); }
+
+        // Add Question Text to Headers (only for keys present)
+        foreach ($questionKeys as $key) {
+            $headers[] = isset($questionMap[$key]) ? $questionMap[$key] : $key;
+        }
+
+        // Helper to escape
+        $esc = function($v) {
+            return htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        };
+
+        // Begin HTML table
+        echo '<table border="1">';
+        echo '<thead><tr>';
+        foreach ($headers as $h) {
+            echo '<th>' . $esc($h) . '</th>';
+        }
+        echo '</tr></thead><tbody>';
 
         // 7. Loop Employees
+        $rowNum = 1;
         foreach ($employees as $emp) {
             $age = '';
             if (!empty($emp->dateOfBirth)) {
@@ -281,19 +343,27 @@ class Admin extends Controller {
                 } catch (\Exception $e) { $age = ''; }
             }
 
+            $locationType = (!empty($emp->province) && $emp->province === 'Head Office') || (!empty($emp->district) && $emp->district === 'Head Office') ? 'Head Office' : 'Province';
             $row = [
-                $emp->id,
-                $emp->firstName,
-                $emp->lastName,
-                $emp->gender,
-                $emp->dateOfBirth,
-                $age,
-                $emp->educationLevel,
+                $rowNum,
+                $locationType,
                 $emp->province,
                 $emp->district,
                 $emp->cluster,
                 $emp->department,
                 $emp->position,
+                $emp->firstName,
+                $emp->middleName,
+                $emp->lastName,
+                (!empty($emp->sex) ? $emp->sex : $emp->gender),
+                $emp->dateOfBirth,
+                $age,
+                $emp->educationLevel,
+                $emp->qualificationYear,
+                $emp->areaOfSpecialisation,
+                $emp->ageRange,
+                $emp->email,
+                $emp->phone,
                 $emp->grade,
                 $emp->experienceYears,
                 $emp->createdAt
@@ -303,20 +373,19 @@ class Admin extends Controller {
             $responses = json_decode($emp->responses ?? '{}', true);
             if (!is_array($responses)) $responses = [];
 
-            // Add Response Values matching the headers
+            // Add Response Values matching the headers (only keys present in filtered results)
             foreach ($questionKeys as $key) {
-                // Check if this key exists in user responses
-                $val = isset($responses[$key]) ? $responses[$key] : '';
-                
-                // Map numeric values to labels if possible (optional, but requested "good field name", maybe "good value" too?)
-                // For now, let's just output the value (1-5). The user asked for field names.
-                $row[] = $val;
+                $row[] = isset($responses[$key]) ? $responses[$key] : '';
             }
 
-            fputcsv($output, $row);
+            echo '<tr>';
+            foreach ($row as $cell) {
+                echo '<td>' . $esc($cell) . '</td>';
+            }
+            echo '</tr>';
+            $rowNum++;
         }
-
-        fclose($output);
+        echo '</tbody></table>';
     }
 
     public function migrateSchema() {
@@ -354,8 +423,10 @@ class Admin extends Controller {
 
         // Ensure textual/location/contact fields (idempotent if already exist)
         $ensureColumn('employee', 'firstName', 'VARCHAR(100) NULL');
+        $ensureColumn('employee', 'middleName', 'VARCHAR(100) NULL');
         $ensureColumn('employee', 'lastName', 'VARCHAR(100) NULL');
         $ensureColumn('employee', 'gender', 'VARCHAR(20) NULL');
+        $ensureColumn('employee', 'sex', 'VARCHAR(20) NULL');
         $ensureColumn('employee', 'dateOfBirth', 'DATE NULL');
         $ensureColumn('employee', 'educationLevel', 'VARCHAR(100) NULL');
         $ensureColumn('employee', 'email', 'VARCHAR(190) NULL');

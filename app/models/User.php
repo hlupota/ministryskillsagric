@@ -12,6 +12,30 @@ class User {
         return $this->db;
     }
 
+    // Ensure users table and a default admin exist
+    public function ensureBootstrap() {
+        $db = $this->getDb();
+        // Create table if it doesn't exist
+        $db->query('CREATE TABLE IF NOT EXISTS users (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(100) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            role VARCHAR(20) NOT NULL DEFAULT "USER",
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+        $db->execute();
+
+        // Seed an admin if table is empty
+        $db->query('SELECT COUNT(*) AS c FROM users');
+        $countRow = $db->single();
+        $count = $countRow ? (int)$countRow->c : 0;
+        if ($count === 0) {
+            $defaultUser = 'admin';
+            $defaultPass = 'admin123';
+            $this->createUser($defaultUser, $defaultPass, 'ADMIN');
+        }
+    }
+
     // Login User
     public function login($username, $password) {
         $db = $this->getDb();

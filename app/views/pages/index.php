@@ -4,9 +4,9 @@
   <section class="py-5 bg-success text-white text-center position-relative">
     <div class="container py-5">
       <h1 class="display-4 fw-bold"> Skills Audit in the <br><span class="text-warning">Agricultural Sector</span></h1>
-      <p class="lead mb-4">A joint  initiative to build a resilient, skill-ready agricultural sector.</p>
+      <p class="lead mb-4">Building a skilled and sustainable agricultural sector.</p>
       <div class="d-flex gap-3 justify-content-center flex-wrap">
-        <a href="<?php echo URLROOT; ?>/questionnaire" class="btn btn-light btn-lg fw-bold">Click here to start my skills audit assessment
+        <a href="<?php echo URLROOT; ?>/questionnaire" class="btn btn-light btn-lg fw-bold">Click here to start 
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ms-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
       </div>

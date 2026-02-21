@@ -52,46 +52,53 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-3">
-                                    <label for="lastName" class="form-label">2. Last Name</label>
+                                    <label for="middleName" class="form-label">2. Middle Name</label>
+                                    <div class="field-wrap">
+                                        <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                                        <input type="text" id="middleName" name="middleName" placeholder="e.g. Tafadzwa" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 mb-3">
+                                    <label for="lastName" class="form-label">3. Last Name</label>
                                     <div class="field-wrap">
                                         <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
                                         <input type="text" id="lastName" name="lastName" placeholder="e.g. Moyo" required class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-3">
-                                    <label for="gender" class="form-label">3. Gender</label>
+                                    <label for="sex" class="form-label">4. Sex</label>
                                     <div class="field-wrap">
                                         <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-                                        <select id="gender" name="gender" required class="form-select">
-                                            <option value="" disabled selected>Select gender</option>
+                                        <select id="sex" name="sex" required class="form-select">
+                                            <option value="" disabled selected>Select sex</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-3">
-                                    <label for="dateOfBirth" class="form-label">4. Date of Birth</label>
+                                    <label for="dateOfBirth" class="form-label">5. Date of Birth</label>
                                     <div class="field-wrap">
                                         <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
                                         <input type="text" id="dateOfBirth" name="dateOfBirth" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}" inputmode="numeric" required class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-3">
-                                    <label for="email" class="form-label">5. Email Address</label>
+                                    <label for="email" class="form-label">6. Email Address</label>
                                     <div class="field-wrap">
                                         <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg></span>
                                         <input type="email" id="email" name="email" placeholder="e.g. name@domain.com" required class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-3">
-                                    <label for="phone" class="form-label">6. Phone Number</label>
+                                    <label for="phone" class="form-label">7. Phone Number</label>
                                     <div class="field-wrap">
                                         <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5 3h3a2 2 0 0 1 2 1.72 12.05 12.05 0 0 0 .57 2.57 2 2 0 0 1-.45 2.11L9 10a16 16 0 0 0 5 5l.6-.75a2 2 0 0 1 2.11-.45 12.05 12.05 0 0 0 2.57.57A2 2 0 0 1 22 16.92z"/></svg></span>
                                         <input type="tel" id="phone" name="phone" placeholder="e.g. +263 77 123 4567" required class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-3">
-                                    <label for="educationLevel" class="form-label">7. Highest Education Level</label>
+                                    <label for="educationLevel" class="form-label">8. Highest Education Level</label>
                                     <div class="field-wrap">
                                         <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 1.5 9 1.5 12 0v-5"/></svg></span>
                                         <select id="educationLevel" name="educationLevel" required class="form-select">
@@ -107,14 +114,14 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-3">
-                                    <label for="qualificationYear" class="form-label">8. Year of Qualification</label>
+                                    <label for="qualificationYear" class="form-label">9. Year of Qualification</label>
                                     <div class="field-wrap">
                                         <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
                                         <input type="number" id="qualificationYear" name="qualificationYear" placeholder="e.g. 2015" min="1950" max="2026" required class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-3">
-                                    <label for="areaOfSpecialisation" class="form-label">9. Area of Specialisation</label>
+                                    <label for="areaOfSpecialisation" class="form-label">10. Area of Specialisation</label>
                                     <div class="field-wrap">
                                         <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></span>
                                         <input type="text" id="areaOfSpecialisation" name="areaOfSpecialisation" placeholder="e.g. Agronomy" required class="form-control">
@@ -182,11 +189,22 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-6 mb-3">
-                                        <label for="province" class="form-label">13. Province</label>
+                                    <div id="locationTypeGroup" class="col-12 col-sm-4 mb-3">
+                                        <label for="locationType" class="form-label">13. Location</label>
                                         <div class="field-wrap">
                                             <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 10.61a8 8 0 1 0-13.49 5.3L12 22l4.65-6.09a8 8 0 0 0 4.19-5.3Z"/><circle cx="12" cy="10" r="3"/></svg></span>
-                                            <select id="province" name="province" required class="form-select">
+                                            <select id="locationType" name="locationType" required class="form-select">
+                                                <option value="" disabled selected>Select Location</option>
+                                                <option value="Province">Province</option>
+                                                <option value="Head Office">Head Office</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="provinceGroup" class="col-12 col-sm-4 mb-3">
+                                        <label for="province" class="form-label">14. Province</label>
+                                        <div class="field-wrap">
+                                            <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 10.61a8 8 0 1 0-13.49 5.3L12 22l4.65-6.09a8 8 0 0 0 4.19-5.3Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                                            <select id="province" name="province" disabled class="form-select">
                                                 <option value="" disabled selected>Select Province</option>
                                                 <?php foreach ($data['locations'] as $province => $districts): ?>
                                                     <option value="<?php echo $province; ?>"><?php echo $province; ?></option>
@@ -194,26 +212,26 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-6 mb-3">
-                                        <label for="district" class="form-label">14. District</label>
+                                    <div id="districtGroup" class="col-12 col-sm-4 mb-3">
+                                        <label for="district" class="form-label">15. District</label>
                                         <div class="field-wrap">
                                             <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 10.61a8 8 0 1 0-13.49 5.3L12 22l4.65-6.09a8 8 0 0 0 4.19-5.3Z"/><circle cx="12" cy="10" r="3"/></svg></span>
-                                            <select id="district" name="district" required disabled class="form-select">
+                                            <select id="district" name="district" disabled class="form-select">
                                                 <option value="" disabled selected>Select District</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <label for="experienceYears" class="form-label">15. Years of Experience in Current Role</label>
+                                    <div id="experienceGroup" class="col-12 mb-3">
+                                        <label for="experienceYears" class="form-label">16. Years of Experience in Current Role</label>
                                         <div class="field-wrap">
                                             <span class="field-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
                                             <select id="experienceYears" name="experienceYears" required class="form-select">
                                                 <option value="" disabled selected>Select Experience</option>
                                                 <option value="Less than 1 year">Less than 1 year</option>
-                                                <option value="1-2 years">1-2 years</option>
-                                                <option value="3-5 years">3-5 years</option>
+                                                <option value="1-5 years">1-5 years</option>
                                                 <option value="6-10 years">6-10 years</option>
-                                                <option value="Over 10 years">Over 10 years</option>
+                                                <option value="11-20 years">11-20 years</option>
+                                                <option value="More than 20 years">More than 20 years</option>
                                             </select>
                                         </div>
                                     </div>

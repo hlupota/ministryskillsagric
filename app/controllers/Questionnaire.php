@@ -24,7 +24,7 @@ class Questionnaire extends Controller {
             $data = $_POST;
             
             // Validate required fields
-            $requiredFields = ['firstName', 'lastName', 'gender', 'dateOfBirth', 'educationLevel', 'province', 'district', 'cluster', 'department', 'position', 'experienceYears'];
+            $requiredFields = ['firstName', 'lastName', 'sex', 'dateOfBirth', 'educationLevel', 'province', 'district', 'cluster', 'department', 'position', 'experienceYears'];
             $errors = [];
             
             foreach ($requiredFields as $field) {

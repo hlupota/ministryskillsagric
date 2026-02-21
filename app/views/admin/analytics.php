@@ -47,7 +47,7 @@
       <div class="card shadow-sm"><div class="card-header bg-white fw-semibold">Experience Levels</div><div class="card-body"><canvas id="experienceChart"></canvas></div></div>
     </div>
     <div class="col-lg-6">
-      <div class="card shadow-sm"><div class="card-header bg-white fw-semibold">Gender</div><div class="card-body"><canvas id="genderChart"></canvas></div></div>
+      <div class="card shadow-sm"><div class="card-header bg-white fw-semibold">Sex</div><div class="card-body"><canvas id="sexChart"></canvas></div></div>
     </div>
     <div class="col-lg-6">
       <div class="card shadow-sm"><div class="card-header bg-white fw-semibold">Education Levels</div><div class="card-body"><canvas id="educationChart"></canvas></div></div>
@@ -110,12 +110,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    new Chart(document.getElementById('genderChart'), {
+    new Chart(document.getElementById('sexChart'), {
         type: 'doughnut',
         data: {
-            labels: <?php echo json_encode(array_keys($data['gender_counts'])); ?>,
+            labels: <?php echo json_encode(array_keys($data['sex_counts'])); ?>,
             datasets: [{
-                data: <?php echo json_encode(array_values($data['gender_counts'])); ?>,
+                data: <?php echo json_encode(array_values($data['sex_counts'])); ?>,
                 backgroundColor: ['#60a5fa','#f472b6','#facc15']
             }]
         }

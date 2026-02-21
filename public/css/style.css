@@ -12,27 +12,28 @@
 }
 
 /* Minimal Bootstrap-like defaults for Tailwind-marked pages during transition */
-body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+body { font-family: 'Trebuchet MS', sans-serif; font-size: 14px; }
 input, select, textarea {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px;
   display: block;
   width: 100%;
   padding: 0.5rem 0.75rem;
   border: 1px solid #ced4da;
   border-radius: 0.375rem;
 }
-label { display: inline-block; margin-bottom: 0.25rem; }
+label { font-family: 'Trebuchet MS', sans-serif; font-size: 14px; display: inline-block; margin-bottom: 0.25rem; }
 .text-muted { color: #6c757d !important; }
 .text-center { text-align: center; }
 .bg-white { background-color: #fff !important; }
-.bg-light, .bg-slate-50 { background-color: #f8f9fa !important; }
+.bg-light { background-color: #f8f9fa !important; }
 .border { border: 1px solid #dee2e6 !important; }
 .rounded, .rounded-lg, .rounded-xl { border-radius: 0.5rem !important; }
 .shadow-sm { box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; }
 .shadow-lg { box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important; }
 .text-primary { color: var(--bs-primary) !important; }
 .bg-primary { background-color: var(--bs-primary) !important; }
-.text-gray-900 { color: #212529 !important; }
-.text-gray-600, .text-muted-foreground { color: #6c757d !important; }
+.text-muted-foreground { color: #6c757d !important; }
 .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
 .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
 .py-5 { padding-top: 3rem; padding-bottom: 3rem; }
@@ -54,17 +55,34 @@ body { background-color: #f6f8fb; }
 .card .card-body { padding: 1.25rem 1.25rem; }
 .form-control, .form-select { border-radius: .6rem; border-color: #d6dbe3; background-color: #fff; }
 .form-control:focus, .form-select:focus { border-color: #16a34a; box-shadow: 0 0 0 .25rem rgba(22,163,74,.15); }
-.btn { border-radius: .6rem; }
+.btn { border-radius: .6rem; font-size: 14px; }
 .btn-primary { background: linear-gradient(135deg, #16a34a, #22c55e); border-color: #16a34a; }
 .btn-primary:hover { filter: brightness(.95); }
 .btn-success { background: linear-gradient(135deg, #16a34a, #22c55e); border-color: #16a34a; }
 .btn-outline-secondary { border-color: #c9d1e1; color: #4b5563; }
 .btn-outline-secondary:hover { background-color: #f1f5f9; color: #111827; }
 
+/* Enforce minimum readable font size across utility classes */
+.small, small, .text-muted, .form-text { font-size: 14px !important; }
+
 /* Step indicator */
 #stepIndicator { scrollbar-width: none; -ms-overflow-style: none; }
 #stepIndicator::-webkit-scrollbar { display: none; }
 #stepIndicator .btn { box-shadow: 0 2px 8px rgba(2,6,23,.08); }
+
+/* Removed Tailwind-like utilities; using Bootstrap classes */
+
+/* KPI cards styling */
+.card-kpi { border-radius: .75rem; border: 1px solid #e9eef5; }
+.card-kpi .card-body { padding: 1rem 1.25rem; }
+.card-kpi.kpi-green { background-image: linear-gradient(180deg, #f0fdf4, #ffffff); border-color: #b7e3c7; }
+.card-kpi.kpi-blue { background-image: linear-gradient(180deg, #eff6ff, #ffffff); border-color: #c7d2fe; }
+.card-kpi.kpi-purple { background-image: linear-gradient(180deg, #f5f3ff, #ffffff); border-color: #ddd6fe; }
+.card-kpi.kpi-orange { background-image: linear-gradient(180deg, #fff7ed, #ffffff); border-color: #fed7aa; }
+.card-kpi.kpi-pink { background-image: linear-gradient(180deg, #fdf2f8, #ffffff); border-color: #fbcfe8; }
+.card-kpi.kpi-teal { background-image: linear-gradient(180deg, #f0fdfa, #ffffff); border-color: #99f6e4; }
+.card-kpi .small { color: #6c757d; }
+.card-kpi h3 { color: #111827; }
 
 /* Subtle separators and headings */
 hr { border-top: 1px solid #e6ebf2; opacity: 1; }
@@ -199,4 +217,21 @@ input.form-check-input[type="checkbox"]:focus {
 input.form-check-input[type="checkbox"]:checked {
   background-color: #16a34a;
   border-color: #16a34a;
+}
+
+/* Global input borders: make all inputs/selects/textarea outer line green */
+.form-control,
+.form-select,
+textarea.form-control,
+input.form-control {
+  border-color: #16a34a;
+  border-width: 2px;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea.form-control:focus,
+input.form-control:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 .25rem rgba(22, 163, 74, .25);
 }

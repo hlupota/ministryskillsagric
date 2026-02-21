@@ -20,9 +20,36 @@ class Employee {
         return $db->resultSet();
     }
 
+    // Get employees filtered by cluster, department, position, province
+    public function getEmployeesFiltered($filters = []) {
+        $db = $this->getDb();
+        $sql = 'SELECT * FROM employee WHERE 1=1';
+        $params = [];
+        if (!empty($filters['cluster'])) {
+            $sql .= ' AND cluster = :cluster';
+            $params[':cluster'] = $filters['cluster'];
+        }
+        if (!empty($filters['department'])) {
+            $sql .= ' AND department = :department';
+            $params[':department'] = $filters['department'];
+        }
+        if (!empty($filters['position'])) {
+            $sql .= ' AND position = :position';
+            $params[':position'] = $filters['position'];
+        }
+        if (!empty($filters['province'])) {
+            $sql .= ' AND province = :province';
+            $params[':province'] = $filters['province'];
+        }
+        $sql .= ' ORDER BY createdAt DESC';
+        $db->query($sql);
+        foreach ($params as $k => $v) { $db->bind($k, $v); }
+        return $db->resultSet();
+    }
+
     public function addEmployee($data) {
         $db = $this->getDb();
-        $db->query('INSERT INTO employee (id, firstName, lastName, gender, dateOfBirth, age, educationLevel, qualificationYear, areaOfSpecialisation, ageRange, email, phone, province, district, cluster, department, position, grade, experienceYears, responses) VALUES (:id, :firstName, :lastName, :gender, :dateOfBirth, :age, :educationLevel, :qualificationYear, :areaOfSpecialisation, :ageRange, :email, :phone, :province, :district, :cluster, :department, :position, :grade, :experienceYears, :responses)');
+        $db->query('INSERT INTO employee (id, firstName, middleName, lastName, sex, dateOfBirth, age, educationLevel, qualificationYear, areaOfSpecialisation, ageRange, email, phone, province, district, cluster, department, position, grade, experienceYears, responses) VALUES (:id, :firstName, :middleName, :lastName, :sex, :dateOfBirth, :age, :educationLevel, :qualificationYear, :areaOfSpecialisation, :ageRange, :email, :phone, :province, :district, :cluster, :department, :position, :grade, :experienceYears, :responses)');
 
         $generatedId = null;
         try {
@@ -34,8 +61,9 @@ class Employee {
 
         // Bind values
         $db->bind(':firstName', $data['firstName'] ?? '');
+        $db->bind(':middleName', $data['middleName'] ?? '');
         $db->bind(':lastName', $data['lastName'] ?? '');
-        $db->bind(':gender', $data['gender'] ?? '');
+        $db->bind(':sex', $data['sex'] ?? '');
         $db->bind(':dateOfBirth', $data['dateOfBirth'] ?? null);
         // Calculate age or use provided
         $age = null;

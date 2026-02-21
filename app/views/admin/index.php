@@ -1,6 +1,6 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
-<div class="min-h-screen bg-slate-50/50">
+<div class="min-vh-100 bg-light">
     <div class="container py-4">
         <!-- Header Section -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end gap-3">
@@ -31,14 +31,14 @@
         <div class="row g-3">
             <!-- Total Responses -->
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card shadow-sm h-100 d-flex align-items-center gap-3">
+                <div class="card card-kpi kpi-green shadow-sm h-100 d-flex align-items-center gap-3">
                     <div class="card-body d-flex align-items-center gap-3">
-                    <div class="p-3 bg-green-100 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-green-600"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <div class="p-3 bg-success-subtle rounded-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-success"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
                     <div>
-                        <p class="text-sm font-medium text-gray-500">Total Responses</p>
-                        <h3 class="text-2xl font-bold text-gray-900"><?php echo $data['stats']['responses']; ?></h3>
+                        <p class="small text-secondary">Total Responses</p>
+                        <h3 class="fs-3 fw-bold text-dark"><?php echo $data['stats']['responses']; ?></h3>
                     </div>
                     </div>
                 </div>
@@ -46,14 +46,14 @@
 
             <!-- Departments -->
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card shadow-sm h-100">
+                <div class="card card-kpi kpi-blue shadow-sm h-100">
                     <div class="card-body d-flex align-items-center gap-3">
-                    <div class="p-3 bg-blue-100 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-blue-600"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
+                    <div class="p-3 bg-primary-subtle rounded-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
                     </div>
                     <div>
-                        <p class="text-sm font-medium text-gray-500">Departments</p>
-                        <h3 class="text-2xl font-bold text-gray-900"><?php echo $data['stats']['departments']; ?></h3>
+                        <p class="small text-secondary">Departments</p>
+                        <h3 class="fs-3 fw-bold text-dark"><?php echo $data['stats']['departments']; ?></h3>
                     </div>
                     </div>
                 </div>
@@ -61,14 +61,14 @@
 
             <!-- Clusters -->
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card shadow-sm h-100">
+                <div class="card card-kpi kpi-purple shadow-sm h-100">
                     <div class="card-body d-flex align-items-center gap-3">
-                    <div class="p-3 bg-purple-100 rounded-full">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-purple-600"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <div class="p-3 bg-info-subtle rounded-circle">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-info"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                     </div>
                     <div>
-                        <p class="text-sm font-medium text-gray-500">Clusters</p>
-                        <h3 class="text-2xl font-bold text-gray-900"><?php echo $data['stats']['clusters']; ?></h3>
+                        <p class="small text-secondary">Clusters</p>
+                        <h3 class="fs-3 fw-bold text-dark"><?php echo $data['stats']['clusters']; ?></h3>
                     </div>
                     </div>
                 </div>
@@ -76,22 +76,65 @@
 
             <!-- Unique Positions -->
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card shadow-sm h-100">
+                <div class="card card-kpi kpi-orange shadow-sm h-100">
                     <div class="card-body d-flex align-items-center gap-3">
-                    <div class="p-3 bg-orange-100 rounded-full">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-orange-600"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <div class="p-3 bg-warning-subtle rounded-circle">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warning"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                     </div>
                     <div>
-                        <p class="text-sm font-medium text-gray-500">Unique Positions</p>
-                        <h3 class="text-2xl font-bold text-gray-900"><?php echo $data['stats']['positions']; ?></h3>
+                        <p class="small text-secondary">Unique Positions</p>
+                        <h3 class="fs-3 fw-bold text-dark"><?php echo $data['stats']['positions']; ?></h3>
                     </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Additional KPIs -->
+        <div class="row g-3 mt-1">
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="card card-kpi kpi-blue shadow-sm h-100 d-flex align-items-center gap-3">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-primary-subtle rounded-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        </div>
+                        <div>
+                            <p class="small text-secondary">Male</p>
+                            <h3 class="fs-3 fw-bold text-dark"><?php echo $data['stats']['sex']['Male'] ?? 0; ?></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="card card-kpi kpi-pink shadow-sm h-100 d-flex align-items-center gap-3">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-danger-subtle rounded-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-danger"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        </div>
+                        <div>
+                            <p class="small text-secondary">Female</p>
+                            <h3 class="fs-3 fw-bold text-dark"><?php echo $data['stats']['sex']['Female'] ?? 0; ?></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="card card-kpi kpi-teal shadow-sm h-100 d-flex align-items-center gap-3">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-info-subtle rounded-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-info"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        </div>
+                        <div>
+                            <p class="small text-secondary">Accessed Site</p>
+                            <h3 class="fs-3 fw-bold text-dark"><?php echo $data['stats']['accessed'] ?? 0; ?></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Table Section -->
-        <div class="space-y-4">
+        <div class="d-flex flex-column gap-3">
             <div class="card card-body d-flex flex-column flex-md-row gap-3 align-items-center justify-content-between">
                 <div class="input-group" style="max-width: 360px;">
                     <span class="input-group-text bg-transparent border-0 ps-0">
@@ -103,13 +146,33 @@
                 <div class="d-flex align-items-center gap-2 ms-md-auto w-100 w-md-auto">
                     <select id="clusterFilter" class="form-select" style="min-width: 200px;">
                         <option value="">All Clusters</option>
+                        <?php foreach(($data['filters']['clusters'] ?? []) as $c): ?>
+                            <option value="<?php echo htmlspecialchars($c); ?>"><?php echo htmlspecialchars($c); ?></option>
+                        <?php endforeach; ?>
                     </select>
 
                     <select id="deptFilter" class="form-select" style="min-width: 200px;">
                         <option value="">All Departments</option>
+                        <?php foreach(($data['filters']['departments'] ?? []) as $d): ?>
+                            <option value="<?php echo htmlspecialchars($d); ?>"><?php echo htmlspecialchars($d); ?></option>
+                        <?php endforeach; ?>
                     </select>
 
-                    <a href="<?php echo URLROOT; ?>/admin/export" class="btn btn-outline-success d-inline-flex align-items-center gap-2">
+                    <select id="positionFilter" class="form-select" style="min-width: 200px;">
+                        <option value="">All Positions</option>
+                        <?php foreach(($data['filters']['positions'] ?? []) as $p): ?>
+                            <option value="<?php echo htmlspecialchars($p); ?>"><?php echo htmlspecialchars($p); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <select id="provinceFilter" class="form-select" style="min-width: 200px;">
+                        <option value="">All Provinces</option>
+                        <?php foreach(($data['filters']['provinces'] ?? []) as $pv): ?>
+                            <option value="<?php echo htmlspecialchars($pv); ?>"><?php echo htmlspecialchars($pv); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <a id="exportExcelLink" href="<?php echo URLROOT; ?>/admin/export" class="btn btn-outline-success d-inline-flex align-items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
                         Export CSV
                     </a>
@@ -142,8 +205,8 @@
                                 <td class="text-muted"><?php echo $counter++; ?></td>
                                 <td class="fw-semibold">
                                     <?php echo $employee->firstName . ' ' . $employee->lastName; ?>
-                                    <?php if (!empty($employee->gender)) : ?>
-                                        <span class="badge rounded-pill text-bg-light border ms-1"><?php echo $employee->gender; ?></span>
+                                    <?php $sexVal = !empty($employee->sex) ? $employee->sex : $employee->gender; if (!empty($sexVal)) : ?>
+                                        <span class="badge rounded-pill text-bg-light border ms-1"><?php echo $sexVal; ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-muted"><?php echo $employee->email; ?></td>
@@ -193,33 +256,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const tbody = table.querySelector('tbody');
     const rows = Array.from(tbody.querySelectorAll('tr'));
 
-    // Populate Filters
-    const clusters = new Set();
-    const depts = new Set();
-
-    rows.forEach(row => {
-        clusters.add(row.cells[5].textContent.trim());
-        depts.add(row.cells[4].textContent.trim());
-    });
-
-    clusters.forEach(c => {
-        const option = document.createElement('option');
-        option.value = c;
-        option.textContent = c;
-        clusterFilter.appendChild(option);
-    });
-
-    depts.forEach(d => {
-        const option = document.createElement('option');
-        option.value = d;
-        option.textContent = d;
-        deptFilter.appendChild(option);
-    });
+    // Filters are server-populated from master lists; only need to bind change handlers
+    const positionFilter = document.getElementById('positionFilter');
+    const provinceFilter = document.getElementById('provinceFilter');
 
     function filterTable() {
         const term = searchInput.value.toLowerCase();
         const cluster = clusterFilter.value;
         const dept = deptFilter.value;
+        const pos = positionFilter.value;
+        const prov = provinceFilter.value;
 
         rows.forEach(row => {
             const name = row.cells[1].textContent.toLowerCase();
@@ -231,8 +277,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const matchesSearch = name.includes(term) || email.includes(term) || position.includes(term);
             const matchesCluster = cluster === '' || rowCluster === cluster;
             const matchesDept = dept === '' || rowDept === dept;
+            const matchesPos = pos === '' || row.cells[3].textContent.trim() === pos;
+            const matchesProv = prov === '' || row.cells[6].textContent.trim() === prov;
 
-            if (matchesSearch && matchesCluster && matchesDept) {
+            if (matchesSearch && matchesCluster && matchesDept && matchesPos && matchesProv) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';
@@ -243,6 +291,21 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('keyup', filterTable);
     clusterFilter.addEventListener('change', filterTable);
     deptFilter.addEventListener('change', filterTable);
+    positionFilter.addEventListener('change', filterTable);
+    provinceFilter.addEventListener('change', filterTable);
+
+    // Bind export link to current filters
+    const exportLink = document.getElementById('exportExcelLink');
+    function updateExportLink() {
+        const params = new URLSearchParams();
+        if (clusterFilter.value) params.set('cluster', clusterFilter.value);
+        if (deptFilter.value) params.set('department', deptFilter.value);
+        if (positionFilter.value) params.set('position', positionFilter.value);
+        if (provinceFilter.value) params.set('province', provinceFilter.value);
+        exportLink.href = '<?php echo URLROOT; ?>/admin/export' + (params.toString() ? ('?' + params.toString()) : '');
+    }
+    [searchInput, clusterFilter, deptFilter, positionFilter, provinceFilter].forEach(el => el.addEventListener('change', updateExportLink));
+    updateExportLink();
 
     // CSV Export Logic
     const exportBtn = document.getElementById('exportBtn');

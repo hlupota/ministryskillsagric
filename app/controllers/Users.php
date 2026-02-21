@@ -3,6 +3,8 @@ class Users extends Controller {
     private $userModel;
     public function __construct() {
         $this->userModel = $this->model('User');
+        // Ensure login works even on a fresh setup
+        $this->userModel->ensureBootstrap();
     }
 
     public function login() {
